@@ -1,1 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KixBix TV</title>
 
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #000;
+      color: #fff;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    header {
+      height: 82px;
+      border-bottom: 2px solid #8a2be2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+    }
+
+    .logo {
+      position: relative;
+      display: inline-block;
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      color: #fff;
+    }
+
+    .logo .hat {
+      position: absolute;
+      width: 58px;
+      height: auto;
+      left: 4px;
+      top: -43px;
+      transform: rotate(-4deg);
+      pointer-events: none;
+    }
+
+    .logo span {
+      color: #a855f7;
+    }
+
+    nav {
+      display: flex;
+      gap: 12px;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      border: 1px solid #8a2be2;
+      padding: 10px 16px;
+      border-radius: 7px;
+      font-weight: 700;
+      font-size: 14px;
+      transition: .2s;
+    }
+
+    nav a:hover {
+      background: #8a2be2;
+    }
+
+    main {
+      width: min(1450px, 94%);
+      margin: 28px auto;
+    }
+
+    .section-title {
+      margin: 0 0 10px;
+      font-size: 15px;
+      color: #c084fc;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .watching {
+      margin-bottom: 10px;
+      font-size: 25px;
+      font-weight: 800;
+    }
+
+    .watching small {
+      color: #aaa;
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 350px;
+      gap: 20px;
+    }
+
+    .player {
+      aspect-ratio: 16 / 9;
+      background: #090909;
+      border: 2px solid #8a2be2;
+      border-radius: 10px;
+      box-shadow: 0 0 28px rgba(138, 43, 226, .18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      font-size: 18px;
+    }
+
+    .live {
+      color: #d8b4fe;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      margin-top: 10px;
+    }
+
+    .chat {
+      height: 100%;
+      min-height: 500px;
+      border: 2px solid #8a2be2;
+      border-radius: 10px;
+      background: #070707;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-header {
+      padding: 15px 16px;
+      border-bottom: 1px solid #3b145f;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .messages {
+      flex: 1;
+      padding: 14px;
+      overflow: hidden;
+    }
+
+    .message {
+      margin-bottom: 13px;
+      line-height: 1.35;
+    }
+
+    .username {
+      color: #c084fc;
+      font-weight: 800;
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 8px;
+      padding: 12px;
+      border-top: 1px solid #3b145f;
+    }
+
+    .chat-input input {
+      flex: 1;
+      min-width: 0;
+      background: #111;
+      color: #fff;
+      border: 1px solid #54207f;
+      border-radius: 6px;
+      padding: 11px;
+      outline: none;
+    }
+
+    .chat-input button {
+      background: #8a2be2;
+      color: #fff;
+      border: 0;
+      border-radius: 6px;
+      padding: 0 15px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    @media (max-width: 850px) {
+      header {
+        padding: 0 16px;
+      }
+
+      .logo {
+        font-size: 27px;
+      }
+
+      nav a {
+        padding: 8px 10px;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .chat {
+        min-height: 350px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo">
+      <img class="hat" src="coco-hat.png" alt="">
+      K<span>ix</span>Bix TV
+    </div>
+
+    <nav>
+      <!-- Replace these with your real links later -->
+      <a href="#" id="channelLink">CHANNEL</a>
+      <a href="#" id="merchLink">MERCH</a>
+    </nav>
+  </header>
+
+  <main>
+    <p class="section-title">Currently Watching</p>
+    <div class="watching">
+      KixBix TV — Broadcast
+      <small>• Live programming</small>
+    </div>
+
+    <div class="layout">
+      <section>
+        <div class="player">
+          BROADCAST PLAYER
+        </div>
+        <div class="live">● LIVE — KIXBIX TV</div>
+      </section>
+
+      <section class="chat">
+        <div class="chat-header">💬 Live Chat</div>
+
+        <div class="messages">
+          <div class="message">
+            <span class="username">KixBix</span>: Welcome to KixBix TV!
+          </div>
+          <div class="message">
+            <span class="username">Viewer</span>: yoooo
+          </div>
+          <div class="message">
+            <span class="username">Viewer2</span>: This is sick
+          </div>
+        </div>
+
+        <div class="chat-input">
+          <input type="text" placeholder="Chat is coming soon..." disabled>
+          <button disabled>Send</button>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
