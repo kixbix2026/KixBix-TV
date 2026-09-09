@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -266,91 +267,96 @@
       }
     }
   </style>
+
 </head>
 
 <body>
 
   <header>
 
-    <div class="logo">
-      <img class="hat" src="coco-hat.png" alt="">
-      K<span>ix</span>Bix TV
-    </div>
+```
+<div class="logo">
+  <img class="hat" src="coco-hat.png" alt="">
+  K<span>ix</span>Bix TV
+</div>
 
-    <nav>
-      <a href="#" id="channelLink">CHANNEL</a>
-      <a href="https://kixbix.shop" id="merchLink">MERCH</a>
-    </nav>
+<nav>
+  <a href="#" id="channelLink">CHANNEL</a>
+  <a href="https://kixbix.shop" id="merchLink">MERCH</a>
+</nav>
+```
 
   </header>
 
   <main>
 
-    <p class="section-title">Currently Watching</p>
+```
+<p class="section-title">Currently Watching</p>
 
-    <div class="watching">
-      KixBix TV — Broadcast
-      <small>• Live programming</small>
-    </div>
+<div class="watching">
+  KixBix TV — Broadcast
+  <small>• Live programming</small>
+</div>
 
-    <div class="layout">
+<div class="layout">
 
-      <!-- TV -->
+  <!-- TV -->
 
-      <section>
+  <section>
 
-        <div class="player">
+    <div class="player">
 
-          <iframe
-            src="https://vidiyo.com/embed/watch/kixbix-tv"
-            title="KixBix TV"
-            allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
-            allowfullscreen>
-          </iframe>
-
-        </div>
-
-        <div class="live">
-          ● LIVE — KIXBIX TV
-        </div>
-
-      </section>
-
-      <!-- CHAT -->
-
-      <section class="chat">
-
-        <div class="chat-header">
-          💬 Live Chat
-        </div>
-
-        <div class="chat-status" id="chatStatus">
-          Connecting to chat...
-        </div>
-
-        <div class="messages" id="messages"></div>
-
-        <div class="chat-input">
-
-          <input
-            type="text"
-            id="messageInput"
-            maxlength="300"
-            placeholder="Type a message..."
-            autocomplete="off"
-            disabled>
-
-          <button id="sendButton" disabled>
-            Send
-          </button>
-
-        </div>
-
-        <div class="chat-error" id="chatError"></div>
-
-      </section>
+      <iframe
+        src="https://vidiyo.com/embed/watch/kixbix-tv"
+        title="KixBix TV"
+        allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+        allowfullscreen>
+      </iframe>
 
     </div>
+
+    <div class="live">
+      ● LIVE — KIXBIX TV
+    </div>
+
+  </section>
+
+  <!-- CHAT -->
+
+  <section class="chat">
+
+    <div class="chat-header">
+      💬 Live Chat
+    </div>
+
+    <div class="chat-status" id="chatStatus">
+      Connecting to chat...
+    </div>
+
+    <div class="messages" id="messages"></div>
+
+    <div class="chat-input">
+
+      <input
+        type="text"
+        id="messageInput"
+        maxlength="300"
+        placeholder="Type a message..."
+        autocomplete="off"
+        disabled>
+
+      <button id="sendButton" disabled>
+        Send
+      </button>
+
+    </div>
+
+    <div class="chat-error" id="chatError"></div>
+
+  </section>
+
+</div>
+```
 
   </main>
 
@@ -363,8 +369,8 @@
 
     import {
       getAuth,
-      signInAnonymously,
-      signInWithEmailAndPassword
+      signInAnonymously
+    }
       from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     import {
@@ -543,10 +549,10 @@
       try {
 
         /*
-          We don't automatically sign in as KixBix.
+          Visitors use anonymous authentication.
 
-          Instead, visitors are anonymous.
-          Your KixBix login will be added next.
+          The KixBix admin login will be added
+          separately on admin.html.
         */
 
         await signInAnonymously(auth);
@@ -589,10 +595,6 @@
           displayMessage
         );
 
-
-        /*
-          Save the current username for sending.
-        */
 
         window.kixbixUsername =
           username;
