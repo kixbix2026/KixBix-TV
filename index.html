@@ -1,5 +1,5 @@
+```html
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -102,8 +102,6 @@
       gap: 20px;
     }
 
-    /* VIDiYO PLAYER */
-
     .player {
       position: relative;
       width: 100%;
@@ -178,6 +176,22 @@
       font-weight: 800;
     }
 
+    .username.kixbix {
+      color: #a855f7;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-left: 5px;
+      padding: 2px 5px;
+      border-radius: 4px;
+      background: #8a2be2;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 900;
+      vertical-align: middle;
+    }
+
     .timestamp {
       color: #666;
       font-size: 10px;
@@ -231,8 +245,6 @@
       padding: 8px 14px;
     }
 
-    /* MOBILE */
-
     @media (max-width: 850px) {
       header {
         padding: 0 16px;
@@ -255,96 +267,91 @@
       }
     }
   </style>
-
 </head>
 
 <body>
 
   <header>
 
-```
-<div class="logo">
-  <img class="hat" src="coco-hat.png" alt="">
-  K<span>ix</span>Bix TV
-</div>
+    <div class="logo">
+      <img class="hat" src="coco-hat.png" alt="">
+      K<span>ix</span>Bix TV
+    </div>
 
-<nav>
-  <a href="#" id="channelLink">CHANNEL</a>
-  <a href="https://kixbix.shop" id="merchLink">MERCH</a>
-</nav>
-```
+    <nav>
+      <a href="#" id="channelLink">CHANNEL</a>
+      <a href="https://kixbix.shop" id="merchLink">MERCH</a>
+    </nav>
 
   </header>
 
   <main>
 
-```
-<p class="section-title">Currently Watching</p>
+    <p class="section-title">Currently Watching</p>
 
-<div class="watching">
-  KixBix TV — Broadcast
-  <small>• Live programming</small>
-</div>
-
-<div class="layout">
-
-  <!-- TV -->
-
-  <section>
-
-    <div class="player">
-
-      <iframe
-        src="https://vidiyo.com/embed/watch/kixbix-tv"
-        title="KixBix TV"
-        allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
-        allowfullscreen>
-      </iframe>
-
+    <div class="watching">
+      KixBix TV — Broadcast
+      <small>• Live programming</small>
     </div>
 
-    <div class="live">
-      ● LIVE — KIXBIX TV
+    <div class="layout">
+
+      <!-- TV -->
+
+      <section>
+
+        <div class="player">
+
+          <iframe
+            src="https://vidiyo.com/embed/watch/kixbix-tv"
+            title="KixBix TV"
+            allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+            allowfullscreen>
+          </iframe>
+
+        </div>
+
+        <div class="live">
+          ● LIVE — KIXBIX TV
+        </div>
+
+      </section>
+
+      <!-- CHAT -->
+
+      <section class="chat">
+
+        <div class="chat-header">
+          💬 Live Chat
+        </div>
+
+        <div class="chat-status" id="chatStatus">
+          Connecting to chat...
+        </div>
+
+        <div class="messages" id="messages"></div>
+
+        <div class="chat-input">
+
+          <input
+            type="text"
+            id="messageInput"
+            maxlength="300"
+            placeholder="Type a message..."
+            autocomplete="off"
+            disabled>
+
+          <button id="sendButton" disabled>
+            Send
+          </button>
+
+        </div>
+
+        <div class="chat-error" id="chatError"></div>
+
+      </section>
+
     </div>
-
-  </section>
-
-  <!-- CHAT -->
-
-  <section class="chat">
-
-    <div class="chat-header">
-      💬 Live Chat
-    </div>
-
-    <div class="chat-status" id="chatStatus">
-      Connecting to chat...
-    </div>
-
-    <div class="messages" id="messages">
-    </div>
-
-    <div class="chat-input">
-
-      <input
-        type="text"
-        id="messageInput"
-        maxlength="300"
-        placeholder="Type a message..."
-        autocomplete="off">
-
-      <button id="sendButton">
-        Send
-      </button>
-
-    </div>
-
-    <div class="chat-error" id="chatError"></div>
-
-  </section>
-
-</div>
-```
 
   </main>
 
@@ -357,8 +364,8 @@
 
     import {
       getAuth,
-      signInAnonymously
-    }
+      signInAnonymously,
+      signInWithEmailAndPassword
       from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     import {
@@ -373,7 +380,7 @@
       from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
-    /* YOUR FIREBASE PROJECT */
+    /* FIREBASE CONFIG */
 
     const firebaseConfig = {
       apiKey: "AIzaSyDoJl_MaPjBQZjb0-AMbrSFFNWt8UNfyHg",
@@ -387,6 +394,12 @@
     };
 
 
+    /* YOUR KIXBIX UID */
+
+    const KIXBIX_UID =
+      "M1WSUIiBslW1duO5viZPsWI4Qch1";
+
+
     /* START FIREBASE */
 
     const app = initializeApp(firebaseConfig);
@@ -395,32 +408,50 @@
 
     const database = getDatabase(app);
 
-    const messagesRef = ref(database, "messages");
+    const messagesRef =
+      ref(database, "messages");
 
 
     /* CHAT ELEMENTS */
 
-    const messagesBox = document.getElementById("messages");
-    const messageInput = document.getElementById("messageInput");
-    const sendButton = document.getElementById("sendButton");
-    const chatStatus = document.getElementById("chatStatus");
-    const chatError = document.getElementById("chatError");
+    const messagesBox =
+      document.getElementById("messages");
+
+    const messageInput =
+      document.getElementById("messageInput");
+
+    const sendButton =
+      document.getElementById("sendButton");
+
+    const chatStatus =
+      document.getElementById("chatStatus");
+
+    const chatError =
+      document.getElementById("chatError");
 
 
-    /* CREATE ANONYMOUS USERNAME */
+    /* CREATE VIEWER NAME */
 
-    let username = localStorage.getItem("kixbixChatUsername");
+    function getViewerName() {
 
-    if (!username) {
+      let viewerName =
+        localStorage.getItem("kixbixChatUsername");
 
-      const number = Math.floor(1000 + Math.random() * 9000);
+      if (!viewerName) {
 
-      username = "Viewer" + number;
+        const number =
+          Math.floor(1000 + Math.random() * 9000);
 
-      localStorage.setItem(
-        "kixbixChatUsername",
-        username
-      );
+        viewerName =
+          "Viewer" + number;
+
+        localStorage.setItem(
+          "kixbixChatUsername",
+          viewerName
+        );
+      }
+
+      return viewerName;
     }
 
 
@@ -428,7 +459,8 @@
 
     function escapeHTML(text) {
 
-      const div = document.createElement("div");
+      const div =
+        document.createElement("div");
 
       div.textContent = text;
 
@@ -444,15 +476,28 @@
 
       if (!message) return;
 
-      const div = document.createElement("div");
+      const div =
+        document.createElement("div");
 
       div.className = "message";
 
+
+      const isKixBix =
+        message.uid === KIXBIX_UID;
+
+
+      const displayName =
+        isKixBix
+          ? "KixBix"
+          : (message.username || "Viewer");
+
+
       const safeUsername =
-        escapeHTML(message.username || "Viewer");
+        escapeHTML(displayName);
 
       const safeText =
         escapeHTML(message.text || "");
+
 
       let time = "";
 
@@ -468,8 +513,22 @@
           })}</span>`;
       }
 
+
+      const badge =
+        isKixBix
+          ? `<span class="badge">OWNER</span>`
+          : "";
+
+
+      const nameClass =
+        isKixBix
+          ? "username kixbix"
+          : "username";
+
+
       div.innerHTML =
-        `<span class="username">${safeUsername}</span>${time}: ${safeText}`;
+        `<span class="${nameClass}">${safeUsername}</span>${badge}${time}: ${safeText}`;
+
 
       messagesBox.appendChild(div);
 
@@ -480,25 +539,72 @@
 
     /* CONNECT */
 
-    signInAnonymously(auth)
+    async function connectChat() {
 
-      .then(() => {
+      try {
+
+        /*
+          We don't automatically sign in as KixBix.
+
+          Instead, visitors are anonymous.
+          Your KixBix login will be added next.
+        */
+
+        await signInAnonymously(auth);
+
+
+        const currentUser =
+          auth.currentUser;
+
+
+        const isKixBix =
+          currentUser &&
+          currentUser.uid === KIXBIX_UID;
+
+
+        let username;
+
+
+        if (isKixBix) {
+
+          username = "KixBix";
+
+        } else {
+
+          username = getViewerName();
+
+        }
+
 
         chatStatus.textContent =
           "Chat connected • You are " + username;
 
+
         messageInput.disabled = false;
 
         sendButton.disabled = false;
+
 
         onChildAdded(
           query(messagesRef, limitToLast(100)),
           displayMessage
         );
 
-      })
 
-      .catch((error) => {
+        /*
+          Save the current username for sending.
+        */
+
+        window.kixbixUsername =
+          username;
+
+        window.kixbixIsOwner =
+          isKixBix;
+
+
+      }
+
+      catch (error) {
 
         console.error(error);
 
@@ -512,7 +618,12 @@
 
         sendButton.disabled = true;
 
-      });
+      }
+
+    }
+
+
+    connectChat();
 
 
     /* SEND MESSAGE */
@@ -522,7 +633,9 @@
       const text =
         messageInput.value.trim();
 
+
       if (!text) return;
+
 
       if (text.length > 300) {
 
@@ -530,25 +643,43 @@
           "Messages can only be 300 characters.";
 
         return;
+
       }
+
+
+      if (!auth.currentUser) {
+
+        chatError.textContent =
+          "Chat is not connected.";
+
+        return;
+
+      }
+
 
       chatError.textContent = "";
 
       sendButton.disabled = true;
 
+
       try {
 
         await push(messagesRef, {
 
-          username: username,
+          username:
+            window.kixbixUsername,
 
-          text: text,
+          text:
+            text,
 
-          timestamp: serverTimestamp(),
+          timestamp:
+            serverTimestamp(),
 
-          uid: auth.currentUser.uid
+          uid:
+            auth.currentUser.uid
 
         });
+
 
         messageInput.value = "";
 
@@ -563,9 +694,11 @@
 
       }
 
+
       sendButton.disabled = false;
 
       messageInput.focus();
+
     }
 
 
@@ -598,3 +731,4 @@
 
 </body>
 </html>
+```
