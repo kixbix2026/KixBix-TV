@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KixBix TV — Admin</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #000;
+      color: #fff;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    header {
+      height: 82px;
+      border-bottom: 2px solid #8a2be2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+    }
+
+    .logo {
+      font-size: 30px;
+      font-weight: 900;
+    }
+
+    .logo span {
+      color: #a855f7;
+    }
+
+    .admin-label {
+      color: #c084fc;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    main {
+      width: min(1000px, 94%);
+      margin: 35px auto;
+    }
+
+    .panel {
+      background: #070707;
+      border: 2px solid #8a2be2;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 0 28px rgba(138, 43, 226, .15);
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 27px;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin-top: 0;
+    }
+
+    .subtitle {
+      color: #999;
+      margin-bottom: 25px;
+    }
+
+    input {
+      display: block;
+      width: 100%;
+      max-width: 450px;
+      margin-bottom: 12px;
+      padding: 12px;
+      background: #111;
+      color: #fff;
+      border: 1px solid #54207f;
+      border-radius: 6px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #a855f7;
+    }
+
+    button {
+      background: #8a2be2;
+      color: #fff;
+      border: 0;
+      border-radius: 6px;
+      padding: 11px 17px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #a855f7;
+    }
+
+    button.danger {
+      background: #7f1d1d;
+    }
+
+    button.danger:hover {
+      background: #b91c1c;
+    }
+
+    .error {
+      color: #ff6b6b;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    .success {
+      color: #86efac;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    #adminPanel {
+      display: none;
+    }
+
+    .admin-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .message-count {
+      color: #999;
+      font-size: 13px;
+    }
+
+    .message {
+      background: #101010;
+      border: 1px solid #32104f;
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .message-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      align-items: center;
+      margin-bottom: 7px;
+    }
+
+    .username {
+      color: #c084fc;
+      font-weight: 800;
+    }
+
+    .username.owner {
+      color: #a855f7;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-left: 6px;
+      padding: 2px 5px;
+      border-radius: 4px;
+      background: #8a2be2;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 900;
+    }
+
+    .timestamp {
+      color: #666;
+      font-size: 11px;
+    }
+
+    .message-text {
+      color: #ddd;
+      word-wrap: break-word;
+      margin-bottom: 10px;
+    }
+
+    .empty {
+      color: #777;
+      text-align: center;
+      padding: 30px;
+    }
+
+    @media (max-width: 650px) {
+      header {
+        padding: 0 16px;
+      }
+
+      .logo {
+        font-size: 24px;
+      }
+
+      .admin-top {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .message-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">
+      Kix<span>Bix</span> TV
+    </div>
+
+```
+<div class="admin-label">
+  ADMIN PANEL
+</div>
+```
+
+  </header>
+
+  <main>
+
+```
+<!-- LOGIN -->
+
+<section class="panel" id="loginPanel">
+
+  <h1>🔐 KixBix TV Admin</h1>
+
+  <p class="subtitle">
+    Sign in with your KixBix administrator account.
+  </p>
+
+  <input
+    type="email"
+    id="emailInput"
+    placeholder="Email"
+    autocomplete="username">
+
+  <input
+    type="password"
+    id="passwordInput"
+    placeholder="Password"
+    autocomplete="current-password">
+
+  <button id="loginButton">
+    Sign In
+  </button>
+
+  <div class="error" id="loginError"></div>
+
+</section>
+
+
+<!-- ADMIN PANEL -->
+
+<section class="panel" id="adminPanel">
+
+  <div class="admin-top">
+
+    <div>
+      <h1>👑 Admin Dashboard</h1>
+      <div class="message-count" id="messageCount">
+        Loading messages...
+      </div>
+    </div>
+
+    <button id="logoutButton">
+      Log Out
+    </button>
+
+  </div>
+
+  <h2>💬 Chat Messages</h2>
+
+  <div id="messages">
+    <div class="empty">
+      Loading...
+    </div>
+  </div>
+
+  <div class="error" id="adminError"></div>
+
+</section>
+```
+
+  </main>
+
+  <!-- FIREBASE -->
+
+  <script type="module">
+
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      signOut
+    }
+      from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    import {
+      getDatabase,
+      ref,
+      onValue,
+      remove
+    }
+      from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+
+    /* FIREBASE CONFIG */
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDoJl_MaPjBQZjb0-AMbrSFFNWt8UNfyHg",
+      authDomain: "kixbix-tv.firebaseapp.com",
+      databaseURL: "https://kixbix-tv-default-rtdb.firebaseio.com",
+      projectId: "kixbix-tv",
+      storageBucket: "kixbix-tv.firebasestorage.app",
+      messagingSenderId: "508606108820",
+      appId: "1:508606108820:web:06b6e65c36e9145ebbd081",
+      measurementId: "G-9EBEJ0WNQ2"
+    };
+
+
+    /* YOUR KIXBIX UID */
+
+    const KIXBIX_UID =
+      "M1WSUIiBslW1duO5viZPsWI4Qch1";
+
+
+    /* START FIREBASE */
+
+    const app =
+      initializeApp(firebaseConfig);
+
+    const auth =
+      getAuth(app);
+
+    const database =
+      getDatabase(app);
+
+
+    /* ELEMENTS */
+
+    const loginPanel =
+      document.getElementById("loginPanel");
+
+    const adminPanel =
+      document.getElementById("adminPanel");
+
+    const emailInput =
+      document.getElementById("emailInput");
+
+    const passwordInput =
+      document.getElementById("passwordInput");
+
+    const loginButton =
+      document.getElementById("loginButton");
+
+    const loginError =
+      document.getElementById("loginError");
+
+    const logoutButton =
+      document.getElementById("logoutButton");
+
+    const messagesBox =
+      document.getElementById("messages");
+
+    const messageCount =
+      document.getElementById("messageCount");
+
+    const adminError =
+      document.getElementById("adminError");
+
+
+    /* LOGIN */
+
+    async function login() {
+
+      const email =
+        emailInput.value.trim();
+
+      const password =
+        passwordInput.value;
+
+      loginError.textContent = "";
+
+      if (!email || !password) {
+
+        loginError.textContent =
+          "Enter your email and password.";
+
+        return;
+      }
+
+      loginButton.disabled = true;
+      loginButton.textContent = "Signing in...";
+
+      try {
+
+        const credential =
+          await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+        const user =
+          credential.user;
+
+
+        /* CHECK ADMIN UID */
+
+        if (user.uid !== KIXBIX_UID) {
+
+          await signOut(auth);
+
+          loginError.textContent =
+            "This account is not authorized.";
+
+          return;
+        }
+
+
+        /* SHOW ADMIN PANEL */
+
+        loginPanel.style.display =
+          "none";
+
+        adminPanel.style.display =
+          "block";
+
+        loadMessages();
+
+      }
+
+      catch (error) {
+
+        console.error(error);
+
+        loginError.textContent =
+          "Login failed. Check your email and password.";
+
+      }
+
+      finally {
+
+        loginButton.disabled = false;
+        loginButton.textContent = "Sign In";
+
+      }
+
+    }
+
+
+    loginButton.addEventListener(
+      "click",
+      login
+    );
+
+
+    passwordInput.addEventListener(
+      "keydown",
+      (event) => {
+
+        if (event.key === "Enter") {
+          login();
+        }
+
+      }
+    );
+
+
+    /* LOAD MESSAGES */
+
+    function loadMessages() {
+
+      const messagesRef =
+        ref(database, "messages");
+
+      onValue(
+        messagesRef,
+        (snapshot) => {
+
+          messagesBox.innerHTML = "";
+
+          const data =
+            snapshot.val();
+
+          if (!data) {
+
+            messageCount.textContent =
+              "0 messages";
+
+            messagesBox.innerHTML =
+              `<div class="empty">No chat messages yet.</div>`;
+
+            return;
+          }
+
+
+          const entries =
+            Object.entries(data);
+
+
+          messageCount.textContent =
+            entries.length +
+            (entries.length === 1
+              ? " message"
+              : " messages");
+
+
+          /* NEWEST FIRST */
+
+          entries.reverse();
+
+
+          for (const [key, message] of entries) {
+
+            createMessage(key, message);
+
+          }
+
+        },
+        (error) => {
+
+          console.error(error);
+
+          adminError.textContent =
+            "Could not load messages.";
+
+        }
+      );
+
+    }
+
+
+    /* CREATE ADMIN MESSAGE */
+
+    function createMessage(key, message) {
+
+      const div =
+        document.createElement("div");
+
+      div.className =
+        "message";
+
+
+      const isOwner =
+        message.uid === KIXBIX_UID;
+
+
+      const username =
+        isOwner
+          ? "KixBix"
+          : (message.username || "Viewer");
+
+
+      const safeUsername =
+        escapeHTML(username);
+
+      const safeText =
+        escapeHTML(message.text || "");
+
+
+      let timestamp = "";
+
+      if (message.timestamp) {
+
+        const date =
+          new Date(message.timestamp);
+
+        timestamp =
+          date.toLocaleString();
+
+      }
+
+
+      div.innerHTML = `
+
+        <div class="message-header">
+
+          <div>
+
+            <span class="${isOwner ? "username owner" : "username"}">
+              ${safeUsername}
+            </span>
+
+            ${isOwner
+              ? '<span class="badge">OWNER</span>'
+              : ""}
+
+          </div>
+
+          <span class="timestamp">
+            ${escapeHTML(timestamp)}
+          </span>
+
+        </div>
+
+        <div class="message-text">
+          ${safeText}
+        </div>
+
+        <button class="danger">
+          Delete Message
+        </button>
+
+      `;
+
+
+      const deleteButton =
+        div.querySelector("button");
+
+
+      deleteButton.addEventListener(
+        "click",
+        async () => {
+
+          const confirmed =
+            confirm(
+              "Delete this message?"
+            );
+
+          if (!confirmed) return;
+
+
+          try {
+
+            await remove(
+              ref(
+                database,
+                "messages/" + key
+              )
+            );
+
+          }
+
+          catch (error) {
+
+            console.error(error);
+
+            adminError.textContent =
+              "Could not delete message.";
+
+          }
+
+        }
+      );
+
+
+      messagesBox.appendChild(div);
+
+    }
+
+
+    /* ESCAPE HTML */
+
+    function escapeHTML(text) {
+
+      const div =
+        document.createElement("div");
+
+      div.textContent =
+        String(text);
+
+      return div.innerHTML;
+
+    }
+
+
+    /* LOGOUT */
+
+    logoutButton.addEventListener(
+      "click",
+      async () => {
+
+        await signOut(auth);
+
+        adminPanel.style.display =
+          "none";
+
+        loginPanel.style.display =
+          "block";
+
+        passwordInput.value = "";
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>
