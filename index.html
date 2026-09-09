@@ -101,17 +101,27 @@
       gap: 20px;
     }
 
+    /* VIDiYO PLAYER */
+
     .player {
+      position: relative;
+      width: 100%;
       aspect-ratio: 16 / 9;
       background: #090909;
       border: 2px solid #8a2be2;
       border-radius: 10px;
+      overflow: hidden;
       box-shadow: 0 0 28px rgba(138, 43, 226, .18);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #666;
-      font-size: 18px;
+    }
+
+    .player iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
     }
 
     .live {
@@ -121,6 +131,8 @@
       letter-spacing: 1px;
       margin-top: 10px;
     }
+
+    /* CHAT */
 
     .chat {
       height: 100%;
@@ -183,6 +195,8 @@
       cursor: pointer;
     }
 
+    /* MOBILE */
+
     @media (max-width: 850px) {
       header {
         padding: 0 16px;
@@ -208,55 +222,99 @@
 </head>
 
 <body>
+
   <header>
+
     <div class="logo">
       <img class="hat" src="coco-hat.png" alt="">
       K<span>ix</span>Bix TV
     </div>
 
     <nav>
-      <!-- Replace these with your real links later -->
+      <!-- PUT YOUR REAL LINKS HERE -->
       <a href="#" id="channelLink">CHANNEL</a>
       <a href="#" id="merchLink">MERCH</a>
     </nav>
+
   </header>
 
+
   <main>
+
     <p class="section-title">Currently Watching</p>
+
     <div class="watching">
       KixBix TV — Broadcast
       <small>• Live programming</small>
     </div>
 
+
     <div class="layout">
+
+      <!-- TV -->
+
       <section>
+
         <div class="player">
-          BROADCAST PLAYER
+
+          <iframe
+            src="https://vidiyo.com/embed/watch/kixbix-tv"
+            title="KixBix TV"
+            allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+            allowfullscreen>
+          </iframe>
+
         </div>
-        <div class="live">● LIVE — KIXBIX TV</div>
+
+        <div class="live">
+          ● LIVE — KIXBIX TV
+        </div>
+
       </section>
 
+
+      <!-- CHAT -->
+
       <section class="chat">
-        <div class="chat-header">💬 Live Chat</div>
+
+        <div class="chat-header">
+          💬 Live Chat
+        </div>
 
         <div class="messages">
+
           <div class="message">
             <span class="username">KixBix</span>: Welcome to KixBix TV!
           </div>
+
           <div class="message">
             <span class="username">Viewer</span>: yoooo
           </div>
+
           <div class="message">
             <span class="username">Viewer2</span>: This is sick
           </div>
+
         </div>
 
         <div class="chat-input">
-          <input type="text" placeholder="Chat is coming soon..." disabled>
-          <button disabled>Send</button>
+
+          <input
+            type="text"
+            placeholder="Chat is coming soon..."
+            disabled>
+
+          <button disabled>
+            Send
+          </button>
+
         </div>
+
       </section>
+
     </div>
+
   </main>
+
 </body>
 </html>
