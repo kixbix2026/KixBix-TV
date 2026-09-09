@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -140,6 +139,39 @@
       font-size: 13px;
     }
 
+    /* ADMIN CHAT */
+
+    .chat-box {
+      background: #050505;
+      border: 1px solid #32104f;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 25px;
+    }
+
+    .chat-title {
+      padding: 13px 15px;
+      border-bottom: 1px solid #32104f;
+      color: #c084fc;
+      font-weight: 800;
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 8px;
+      padding: 12px;
+    }
+
+    .chat-input input {
+      flex: 1;
+      max-width: none;
+      margin: 0;
+    }
+
+    .chat-input button {
+      white-space: nowrap;
+    }
+
     .message {
       background: #101010;
       border: 1px solid #32104f;
@@ -211,93 +243,132 @@
         align-items: flex-start;
         flex-direction: column;
       }
+
+      .chat-input {
+        flex-direction: column;
+      }
+
+      .chat-input button {
+        width: 100%;
+      }
     }
   </style>
-
 </head>
 
 <body>
 
   <header>
+
     <div class="logo">
       Kix<span>Bix</span> TV
     </div>
 
-```
-<div class="admin-label">
-  ADMIN PANEL
-</div>
-```
+    <div class="admin-label">
+      ADMIN PANEL
+    </div>
 
   </header>
 
   <main>
 
-```
-<!-- LOGIN -->
+    <!-- LOGIN -->
 
-<section class="panel" id="loginPanel">
+    <section class="panel" id="loginPanel">
 
-  <h1>🔐 KixBix TV Admin</h1>
+      <h1>🔐 KixBix TV Admin</h1>
 
-  <p class="subtitle">
-    Sign in with your KixBix administrator account.
-  </p>
+      <p class="subtitle">
+        Sign in with your KixBix administrator account.
+      </p>
 
-  <input
-    type="email"
-    id="emailInput"
-    placeholder="Email"
-    autocomplete="username">
+      <input
+        type="email"
+        id="emailInput"
+        placeholder="Email"
+        autocomplete="username">
 
-  <input
-    type="password"
-    id="passwordInput"
-    placeholder="Password"
-    autocomplete="current-password">
+      <input
+        type="password"
+        id="passwordInput"
+        placeholder="Password"
+        autocomplete="current-password">
 
-  <button id="loginButton">
-    Sign In
-  </button>
+      <button id="loginButton">
+        Sign In
+      </button>
 
-  <div class="error" id="loginError"></div>
+      <div class="error" id="loginError"></div>
 
-</section>
+    </section>
 
 
-<!-- ADMIN PANEL -->
+    <!-- ADMIN PANEL -->
 
-<section class="panel" id="adminPanel">
+    <section class="panel" id="adminPanel">
 
-  <div class="admin-top">
+      <div class="admin-top">
 
-    <div>
-      <h1>👑 Admin Dashboard</h1>
-      <div class="message-count" id="messageCount">
-        Loading messages...
+        <div>
+          <h1>👑 Admin Dashboard</h1>
+
+          <div class="message-count" id="messageCount">
+            Loading messages...
+          </div>
+        </div>
+
+        <button id="logoutButton">
+          Log Out
+        </button>
+
       </div>
-    </div>
 
-    <button id="logoutButton">
-      Log Out
-    </button>
 
-  </div>
+      <!-- KIXBIX CHAT -->
 
-  <h2>💬 Chat Messages</h2>
+      <h2>💬 Chat as KixBix</h2>
 
-  <div id="messages">
-    <div class="empty">
-      Loading...
-    </div>
-  </div>
+      <div class="chat-box">
 
-  <div class="error" id="adminError"></div>
+        <div class="chat-title">
+          🟣 KixBix — Owner
+        </div>
 
-</section>
-```
+        <div class="chat-input">
+
+          <input
+            type="text"
+            id="adminMessageInput"
+            maxlength="300"
+            placeholder="Send a message as KixBix..."
+            autocomplete="off">
+
+          <button id="adminSendButton">
+            Send
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- MESSAGE MODERATION -->
+
+      <h2>🛡️ Chat Messages</h2>
+
+      <div id="messages">
+
+        <div class="empty">
+          Loading...
+        </div>
+
+      </div>
+
+      <div class="error" id="adminError"></div>
+
+    </section>
 
   </main>
+
 
   <!-- FIREBASE -->
 
@@ -317,7 +388,9 @@
       getDatabase,
       ref,
       onValue,
-      remove
+      push,
+      remove,
+      serverTimestamp
     }
       from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
@@ -386,6 +459,12 @@
     const adminError =
       document.getElementById("adminError");
 
+    const adminMessageInput =
+      document.getElementById("adminMessageInput");
+
+    const adminSendButton =
+      document.getElementById("adminSendButton");
+
 
     /* LOGIN */
 
@@ -446,6 +525,8 @@
 
         loadMessages();
 
+        adminMessageInput.focus();
+
       }
 
       catch (error) {
@@ -478,7 +559,9 @@
       (event) => {
 
         if (event.key === "Enter") {
+
           login();
+
         }
 
       }
@@ -536,6 +619,7 @@
           }
 
         },
+
         (error) => {
 
           console.error(error);
@@ -666,6 +750,117 @@
       messagesBox.appendChild(div);
 
     }
+
+
+    /* SEND MESSAGE AS KIXBIX */
+
+    async function sendAdminMessage() {
+
+      const text =
+        adminMessageInput.value.trim();
+
+
+      if (!text) return;
+
+
+      if (text.length > 300) {
+
+        adminError.textContent =
+          "Messages can only be 300 characters.";
+
+        return;
+      }
+
+
+      const user =
+        auth.currentUser;
+
+
+      if (!user || user.uid !== KIXBIX_UID) {
+
+        adminError.textContent =
+          "You are not authorized.";
+
+        return;
+      }
+
+
+      adminError.textContent =
+        "";
+
+      adminSendButton.disabled =
+        true;
+
+      adminSendButton.textContent =
+        "Sending...";
+
+
+      try {
+
+        await push(
+          ref(database, "messages"),
+          {
+            username: "KixBix",
+
+            text: text,
+
+            timestamp:
+              serverTimestamp(),
+
+            uid:
+              KIXBIX_UID
+          }
+        );
+
+
+        adminMessageInput.value =
+          "";
+
+      }
+
+      catch (error) {
+
+        console.error(error);
+
+        adminError.textContent =
+          "Message could not be sent.";
+
+      }
+
+
+      adminSendButton.disabled =
+        false;
+
+      adminSendButton.textContent =
+        "Send";
+
+      adminMessageInput.focus();
+
+    }
+
+
+    adminSendButton.addEventListener(
+      "click",
+      sendAdminMessage
+    );
+
+
+    /* ENTER TO SEND */
+
+    adminMessageInput.addEventListener(
+      "keydown",
+      (event) => {
+
+        if (event.key === "Enter") {
+
+          event.preventDefault();
+
+          sendAdminMessage();
+
+        }
+
+      }
+    );
 
 
     /* ESCAPE HTML */
