@@ -64,7 +64,7 @@
       border-radius: 7px;
       font-weight: 700;
       font-size: 14px;
-      transition: .2s;
+      transition: 0.2s;
     }
 
     nav a:hover {
@@ -110,7 +110,7 @@
       border: 2px solid #8a2be2;
       border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 0 28px rgba(138, 43, 226, .18);
+      box-shadow: 0 0 28px rgba(138, 43, 226, 0.18);
     }
 
     .player iframe {
@@ -407,11 +407,14 @@
 
     /* START FIREBASE */
 
-    const app = initializeApp(firebaseConfig);
+    const app =
+      initializeApp(firebaseConfig);
 
-    const auth = getAuth(app);
+    const auth =
+      getAuth(app);
 
-    const database = getDatabase(app);
+    const database =
+      getDatabase(app);
 
     const messagesRef =
       ref(database, "messages");
@@ -467,7 +470,8 @@
       const div =
         document.createElement("div");
 
-      div.textContent = text;
+      div.textContent =
+        text;
 
       return div.innerHTML;
     }
@@ -477,14 +481,16 @@
 
     function displayMessage(data) {
 
-      const message = data.val();
+      const message =
+        data.val();
 
       if (!message) return;
 
       const div =
         document.createElement("div");
 
-      div.className = "message";
+      div.className =
+        "message";
 
 
       const isKixBix =
@@ -551,7 +557,7 @@
         /*
           Visitors use anonymous authentication.
 
-          The KixBix admin login will be added
+          The KixBix admin login is handled
           separately on admin.html.
         */
 
@@ -572,11 +578,13 @@
 
         if (isKixBix) {
 
-          username = "KixBix";
+          username =
+            "KixBix";
 
         } else {
 
-          username = getViewerName();
+          username =
+            getViewerName();
 
         }
 
@@ -585,9 +593,11 @@
           "Chat connected • You are " + username;
 
 
-        messageInput.disabled = false;
+        messageInput.disabled =
+          false;
 
-        sendButton.disabled = false;
+        sendButton.disabled =
+          false;
 
 
         onChildAdded(
@@ -602,7 +612,6 @@
         window.kixbixIsOwner =
           isKixBix;
 
-
       }
 
       catch (error) {
@@ -615,10 +624,11 @@
         chatError.textContent =
           "Could not connect to chat.";
 
-        messageInput.disabled = true;
+        messageInput.disabled =
+          true;
 
-        sendButton.disabled = true;
-
+        sendButton.disabled =
+          true;
       }
 
     }
@@ -644,7 +654,6 @@
           "Messages can only be 300 characters.";
 
         return;
-
       }
 
 
@@ -654,35 +663,38 @@
           "Chat is not connected.";
 
         return;
-
       }
 
 
-      chatError.textContent = "";
+      chatError.textContent =
+        "";
 
-      sendButton.disabled = true;
+      sendButton.disabled =
+        true;
 
 
       try {
 
-        await push(messagesRef, {
+        await push(
+          messagesRef,
+          {
+            username:
+              window.kixbixUsername,
 
-          username:
-            window.kixbixUsername,
+            text:
+              text,
 
-          text:
-            text,
+            timestamp:
+              serverTimestamp(),
 
-          timestamp:
-            serverTimestamp(),
-
-          uid:
-            auth.currentUser.uid
-
-        });
+            uid:
+              auth.currentUser.uid
+          }
+        );
 
 
-        messageInput.value = "";
+        messageInput.value =
+          "";
 
       }
 
@@ -692,11 +704,11 @@
 
         chatError.textContent =
           "Message could not be sent.";
-
       }
 
 
-      sendButton.disabled = false;
+      sendButton.disabled =
+        false;
 
       messageInput.focus();
 
